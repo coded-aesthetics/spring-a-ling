@@ -7,7 +7,7 @@ let spring2;
 let spring3;
 
 const fr = 60.0;
-const surface_friction = 0.99;
+const surface_friction = 2.5;
 
 function setup() {
   createCanvas(1000, 1000);
@@ -15,8 +15,8 @@ function setup() {
 
   spring = new Spring(new Particle(Math.random()* 1000, Math.random()* 1000), Math.random());
 
-  spring2= new Spring(new Particle(Math.random()* 1000, Math.random()* 1000), Math.random());
-  spring3= new Spring(new Particle(Math.random()* 1000, Math.random()* 1000), Math.random());
+  spring2 = new Spring(new Particle(Math.random()* 1000, Math.random()* 1000), Math.random());
+  spring3 = new Spring(new Particle(Math.random()* 1000, Math.random()* 1000), Math.random());
   particle = new Particle(600, 600, createVector(Math.random()* 1000 - 500, Math.random()* 1000 -500));
 }
 
@@ -86,7 +86,7 @@ function draw() {
   spring2.act_on_particle(particle, time_slice);
   spring3.act_on_particle(particle, time_slice);
 
-  particle.update(time_slice, 0.4);
+  particle.update(time_slice, 1 / surface_friction);
   drawParticleFunk(particle);
   drawSpring(spring);
   drawSpring(spring2);
