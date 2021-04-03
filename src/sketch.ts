@@ -85,7 +85,7 @@ let particles = [];
 
     drawSpringRing(springRing);
     springRing.springs.forEach(x => x.particle_center.act(new p5.Vector().set(0, 10)))
-    springRing.springs.forEach(x => x.particle_center.velocity =  x.particle_center.pos.y > p.windowHeight-20 ?  x.particle_center.velocity.reflect(new p5.Vector().set(0, -1)) : x.particle_center.velocity)
+    springRing.springs.forEach(x => x.particle_center.velocity =  x.particle_center.pos.y > p.windowHeight-50 ?  x.particle_center.velocity.reflect(new p5.Vector().set(0, -1)) : x.particle_center.velocity)
 
     particles.forEach(part => part.update(time_slice, 1 / surface_friction))
     particles.forEach(drawParticleFunk)
