@@ -1,0 +1,191 @@
+{
+  "currentId": 9,
+  "modules": {
+    "1": {
+      "absPath": "/home/hd1/dev/javascript/spring_ding/src/sketch.ts",
+      "dependencies": [
+        4,
+        5,
+        2,
+        6
+      ],
+      "id": 1,
+      "mtime": 1617439387707,
+      "packageId": "default",
+      "publicPath": "src/sketch.ts"
+    },
+    "2": {
+      "absPath": "/home/hd1/dev/javascript/spring_ding/node_modules/fuse-box/modules/fuse-box-hot-reload/clientHotReload.ts",
+      "dependencies": [
+        3
+      ],
+      "id": 2,
+      "mtime": 499162500000,
+      "packageId": "fuse-box-hot-reload@1.0.0",
+      "publicPath": "node_modules/fuse-box/modules/fuse-box-hot-reload/clientHotReload.ts"
+    },
+    "3": {
+      "absPath": "/home/hd1/dev/javascript/spring_ding/node_modules/fuse-box/modules/fuse-box-websocket/index.js",
+      "dependencies": [
+        7
+      ],
+      "id": 3,
+      "mtime": 499162500000,
+      "packageId": "fuse-box-websocket@1.0.0",
+      "publicPath": "node_modules/fuse-box/modules/fuse-box-websocket/index.js"
+    },
+    "4": {
+      "absPath": "/home/hd1/dev/javascript/spring_ding/src/particle.ts",
+      "dependencies": [
+        5
+      ],
+      "id": 4,
+      "mtime": 1617439323524,
+      "packageId": "default",
+      "publicPath": "src/particle.ts"
+    },
+    "5": {
+      "absPath": "/home/hd1/dev/javascript/spring_ding/node_modules/p5/lib/p5.min.js",
+      "dependencies": [],
+      "id": 5,
+      "mtime": 499162500000,
+      "packageId": "p5@1.3.1",
+      "publicPath": "node_modules/p5/lib/p5.min.js"
+    },
+    "6": {
+      "absPath": "/home/hd1/dev/javascript/spring_ding/src/spring-ring.ts",
+      "dependencies": [
+        8,
+        9
+      ],
+      "id": 6,
+      "mtime": 1617439622379,
+      "packageId": "default",
+      "publicPath": "src/spring-ring.ts"
+    },
+    "7": {
+      "absPath": "/home/hd1/dev/javascript/spring_ding/node_modules/fuse-box/modules/events/index.js",
+      "dependencies": [],
+      "id": 7,
+      "mtime": 499162500000,
+      "packageId": "events@1.0.0",
+      "publicPath": "node_modules/fuse-box/modules/events/index.js"
+    },
+    "8": {
+      "absPath": "/home/hd1/dev/javascript/spring_ding/src/particle-utils.ts",
+      "dependencies": [
+        5,
+        4
+      ],
+      "id": 8,
+      "mtime": 1617439164846,
+      "packageId": "default",
+      "publicPath": "src/particle-utils.ts"
+    },
+    "9": {
+      "absPath": "/home/hd1/dev/javascript/spring_ding/src/spring.ts",
+      "dependencies": [
+        5,
+        8
+      ],
+      "id": 9,
+      "mtime": 1617439170434,
+      "packageId": "default",
+      "publicPath": "src/spring.ts"
+    }
+  },
+  "packages": {
+    "default": {
+      "type": 0,
+      "publicName": "default",
+      "isUserPackage": true,
+      "isExternalPackage": false
+    },
+    "fuse-box-hot-reload@1.0.0": {
+      "type": 1,
+      "meta": {
+        "fusebox": {
+          "dev": true
+        },
+        "name": "fuse-box-hot-reload",
+        "packageJSONLocation": "/home/hd1/dev/javascript/spring_ding/node_modules/fuse-box/modules/fuse-box-hot-reload/package.json",
+        "packageRoot": "/home/hd1/dev/javascript/spring_ding/node_modules/fuse-box/modules/fuse-box-hot-reload",
+        "version": "1.0.0",
+        "entryAbsPath": "/home/hd1/dev/javascript/spring_ding/node_modules/fuse-box/modules/fuse-box-hot-reload/clientHotReload.ts",
+        "entryFuseBoxPath": "clientHotReload.js"
+      },
+      "publicName": "fuse-box-hot-reload@1.0.0",
+      "isUserPackage": false,
+      "isExternalPackage": true,
+      "deps": [
+        2
+      ],
+      "mtime": 499162500000
+    },
+    "fuse-box-websocket@1.0.0": {
+      "type": 1,
+      "meta": {
+        "fusebox": {
+          "dev": true
+        },
+        "name": "fuse-box-websocket",
+        "packageJSONLocation": "/home/hd1/dev/javascript/spring_ding/node_modules/fuse-box/modules/fuse-box-websocket/package.json",
+        "packageRoot": "/home/hd1/dev/javascript/spring_ding/node_modules/fuse-box/modules/fuse-box-websocket",
+        "version": "1.0.0",
+        "entryAbsPath": "/home/hd1/dev/javascript/spring_ding/node_modules/fuse-box/modules/fuse-box-websocket/index.js",
+        "entryFuseBoxPath": "index.js"
+      },
+      "publicName": "fuse-box-websocket@1.0.0",
+      "isUserPackage": false,
+      "isExternalPackage": true,
+      "deps": [
+        3
+      ],
+      "mtime": 499162500000
+    },
+    "p5@1.3.1": {
+      "type": 1,
+      "meta": {
+        "name": "p5",
+        "packageJSONLocation": "/home/hd1/dev/javascript/spring_ding/node_modules/p5/package.json",
+        "packageRoot": "/home/hd1/dev/javascript/spring_ding/node_modules/p5",
+        "version": "1.3.1",
+        "entryAbsPath": "/home/hd1/dev/javascript/spring_ding/node_modules/p5/lib/p5.min.js",
+        "entryFuseBoxPath": "lib/p5.min.js"
+      },
+      "publicName": "p5@1.3.1",
+      "isUserPackage": false,
+      "isExternalPackage": true,
+      "deps": [
+        5
+      ],
+      "mtime": 1617438535234
+    },
+    "events@1.0.0": {
+      "type": 1,
+      "meta": {
+        "fusebox": {
+          "polyfill": true
+        },
+        "name": "events",
+        "packageJSONLocation": "/home/hd1/dev/javascript/spring_ding/node_modules/fuse-box/modules/events/package.json",
+        "packageRoot": "/home/hd1/dev/javascript/spring_ding/node_modules/fuse-box/modules/events",
+        "version": "1.0.0",
+        "entryAbsPath": "/home/hd1/dev/javascript/spring_ding/node_modules/fuse-box/modules/events/index.js",
+        "entryFuseBoxPath": "index.js"
+      },
+      "publicName": "events@1.0.0",
+      "isUserPackage": false,
+      "isExternalPackage": true,
+      "deps": [
+        7
+      ],
+      "mtime": 499162500000
+    }
+  },
+  "ctx": {
+    "linkedReferences": {},
+    "systemDependencies": {},
+    "tsConfigAtPaths": []
+  }
+}
