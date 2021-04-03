@@ -67,7 +67,7 @@ let particles = [];
     p.createCanvas(window.innerWidth, window.innerHeight-20);
     p.frameRate(fr);
 
-    springRing = new SpringRing(50);
+    springRing = new SpringRing(50, false);
 
     particle = new Particle(Math.random()* window.innerWidth, Math.random()* window.innerHeight, p.createVector(Math.random()* window.innerWidth - window.innerWidth/2, Math.random()* 1000 -500));
   }
@@ -85,7 +85,7 @@ let particles = [];
     springRing.update(time_slice, 1 / surface_friction)
 
     drawSpringRing(springRing);
-    springRing.springs.forEach(x => x.particle_center.act(new p5.Vector().set(0, 10)))
+    springRing.springs.forEach(x => x.particle_center.act(new p5.Vector().set(0, 5)))
     springRing.springs.forEach(x => x.particle_center.velocity =  x.particle_center.pos.y > p.windowHeight-50 ?  x.particle_center.velocity.reflect(new p5.Vector().set(0, -1)) : x.particle_center.velocity)
 
     particles.forEach(part => part.update(time_slice, 1 / surface_friction))
