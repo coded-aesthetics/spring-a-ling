@@ -20,7 +20,7 @@ function calculate_centroid(vectors) {
 }
 
 function drawSpringRing(springRing) {
-  springRing.springs.forEach((spring, index) => drawParticle(spring.particle_center, (index + 1) * 3));
+  springRing.springs.forEach((spring, index) => drawParticleFunk(spring.particle_center));
   for (let i = 0; i < springRing.springs.length - 1; i++) {
     drawLine(springRing.springs[i].particle_center, springRing.springs[i + 1].particle_center)
   }
@@ -33,8 +33,9 @@ function drawSpringRing(springRing) {
   }
 
 function drawParticleFunk(particle) {
-  const radius = particle.velocity.mag() / 50;
-  p.fill(Math.abs(Math.round(particle.velocity.x/10,)), Math.abs(Math.round(particle.velocity.y/10,)) ,radius*5);
+  p.stroke(0, 0, 0, 1.0);
+  const radius = particle.velocity.mag() / 5;
+  p.fill(Math.abs(Math.round(particle.velocity.x/2,)), Math.abs(Math.round(particle.velocity.y/2,)) ,radius*5);
   p.ellipse(particle.pos.x, particle.pos.y, radius, radius)
 }
 
