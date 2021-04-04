@@ -1,18 +1,16 @@
 import p5 from 'p5';
 
-export function Particle(x_, y_, velocity_ = new p5.Vector().set(0,0)) {
+export function Particle(x_, y_, velocity_ = new p5.Vector().set(0,0), stationary = false) {
   this.velocity = velocity_;
   this.pos = new p5.Vector().set(x_ , y_);
 
-  this.nudge = function (dx, dy) {
-    return new Particle(x_ + dx, y_ + dy, velocity_);
-  }
-
   this.act = function (velocity) {
+    if (stationary) return;
     this.velocity.add(velocity);
   }
 
   this.update = function (time_slice, surface_smoothness) {
+    if (stationary) return;
     this.velocity.mult(1- ((1 - surface_smoothness) * time_slice));
     this.pos.add(p5.Vector.mult(this.velocity, time_slice));
   }
