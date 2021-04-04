@@ -2,6 +2,7 @@
 import {Particle} from './particle';
 import p5 from 'p5';
 import { SpringRing } from './spring-ring';
+import { BouncyBlob } from './bouncy-blob';
 
 var sketch = function (p: p5) {
   // let ding: p5.SoundFile
@@ -12,12 +13,7 @@ var sketch = function (p: p5) {
   let particle;
 
   const fr = 60.0;
-  const surface_friction = 5;
-
-function calculate_centroid(vectors) {
-  const sumVector = vectors.reduce((acc, cur) => p5.Vector.add(acc, cur), p.createVector(0, 0))
-  return sumVector.mult(1 / vectors.length);
-}
+  const surface_friction = 25;
 
 function drawSpringRing(springRing) {
   springRing.springs.forEach((spring, index) => drawParticleFunk(spring.particle_center));
@@ -25,6 +21,10 @@ function drawSpringRing(springRing) {
     drawLine(springRing.springs[i].particle_center, springRing.springs[i + 1].particle_center)
   }
   drawLine(springRing.springs[springRing.springs.length - 1].particle_center, springRing.springs[0].particle_center);
+}
+
+function drawBouncyBlob(bouncyBlob) {
+  drawSpringRing(bouncyBlob.springRing);
 }
 
   function drawParticle(particle, size = 10, color = 255) {
@@ -67,7 +67,7 @@ let particles = [];
     p.createCanvas(window.innerWidth, window.innerHeight-20);
     p.frameRate(fr);
 
-    springRing = new SpringRing(50, false);
+    springRing = new BouncyBlob(5);
 
     particle = new Particle(Math.random()* window.innerWidth, Math.random()* window.innerHeight, p.createVector(Math.random()* window.innerWidth - window.innerWidth/2, Math.random()* 1000 -500));
   }
@@ -84,7 +84,7 @@ let particles = [];
 
     springRing.update(time_slice, 1 / surface_friction)
 
-    drawSpringRing(springRing);
+    drawBouncyBlob(springRing);
     // springRing.springs.forEach(x => x.particle_center.act(new p5.Vector().set(0, 5)))
     // springRing.springs.forEach(x => x.particle_center.velocity =  x.particle_center.pos.y > p.windowHeight-50 ?  x.particle_center.velocity.reflect(new p5.Vector().set(0, -1)) : x.particle_center.velocity)
 

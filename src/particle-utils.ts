@@ -29,3 +29,8 @@ export function sort_particles_by_vicinity(particles) {
     }
     return sorted_particles;
   }
+
+  export function calculate_centroid(vectors) {
+    const sumVector = vectors.reduce((acc, cur) => p5.Vector.add(acc, cur), new p5.Vector().set(0, 0))
+    return sumVector.mult(1 / vectors.length);
+  }
