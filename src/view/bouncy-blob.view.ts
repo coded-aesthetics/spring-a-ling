@@ -1,10 +1,10 @@
-import { spring_ring_view } from './spring-ring.view';
+import { rubber_band_view } from './rubber-band.view';
 
 export const bouncy_blob_view = function(p:p5) {
-  const utils = spring_ring_view(p);
+  const utils = rubber_band_view(p);
 
   function drawBouncyBlob(bouncyBlob) {
-    utils.drawSpringRing(bouncyBlob.springRing);
+    utils.drawRubberBand(bouncyBlob.springRing);
   }
 
   return { drawBouncyBlob };

@@ -1,12 +1,12 @@
-import { SpringRing } from './spring-ring';
+import { RubberBand } from './rubber-band';
 import { calculate_centroid } from './particle-utils';
-import { Spring } from './spring';
+import { RubberString } from './rubber-string';
 import { Particle } from './particle';
 import p5 from 'p5';
 import { Repeller } from './repeller';
 
 export function BouncyBlob(amount) {
-    this.springRing = new SpringRing(amount);
+    this.springRing = new RubberBand(amount);
     this.update = function(time_slice, surface_smoothness) {
       this.springRing.update(time_slice, surface_smoothness);
       const centroid_vector = calculate_centroid(this.springRing.springs.map(x => x.particle_center.pos));
@@ -19,7 +19,7 @@ export function BouncyBlob(amount) {
 
       const springs = this.springRing.springs.map(x => {
        const p = new Particle(x.particle_center.pos.x,x.particle_center.pos.y, x.particle_center.velocity, true)
-       return new Spring(p, centroid, 0.0005)
+       return new RubberString(p, centroid, 0.0005)
       });
       springs.forEach(spring => spring.update(time_slice, surface_smoothness));
     }

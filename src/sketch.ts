@@ -1,16 +1,19 @@
 /// <reference path="../global.d.ts" />
 
 import p5 from 'p5';
-import { BouncySolid } from './model/bouncy-solid';
-import { bouncy_solid_view } from './view/bouncy-solid.view';
+import { Particle } from './model/particle';
+import { Spring } from './model/spring';
+import { SpringySolid } from './model/springy-solid';
+import { spring_view } from './view/spring.view';
+import { springy_solid_view } from './view/springy-solid.view';
 
 var sketch = function (p: p5) {
   // let ding: p5.SoundFile
 
   let then = Date.now();
 
-  let bouncy_solid;
-  let bouncy_solid_renderer;
+  let springy_solid;
+  let springy_solid_renderer;
 
   const fr = 60.0;
   const surface_friction = 25;
@@ -24,8 +27,8 @@ var sketch = function (p: p5) {
     p.createCanvas(window.innerWidth, window.innerHeight-20);
     p.frameRate(fr);
 
-    bouncy_solid = new BouncySolid(new p5.Vector().set(Math.random()* window.innerWidth, Math.random()* window.innerHeight), 80, 120);
-    bouncy_solid_renderer = bouncy_solid_view(p);
+    springy_solid = new SpringySolid(new p5.Vector().set(Math.random()* window.innerWidth, Math.random()* window.innerHeight), 80, 120);
+    springy_solid_renderer = springy_solid_view(p);
   }
 
   p.windowResized = function() {
@@ -38,8 +41,8 @@ var sketch = function (p: p5) {
 
     const time_slice = deltaTime / 1000;
 
-    bouncy_solid.update(time_slice, 1/surface_friction);
-    bouncy_solid_renderer.drawBouncySolid(bouncy_solid);
+    springy_solid.update(time_slice, 1/surface_friction);
+    springy_solid_renderer.drawSpringySolid(springy_solid);
 
     then = Date.now();
   }
