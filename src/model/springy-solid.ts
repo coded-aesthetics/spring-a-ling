@@ -7,8 +7,8 @@ const create_solid = (min_radius_, max_radius_, amount_vertices) => {
     const vertices_polar = [];
     for (let i = 0; i < amount_vertices; i++) {
         const r = Math.random() * ( max_radius_ - min_radius_) + min_radius_;
-        const min_theta = i * 2 * Math.PI / amount_vertices;
-        const max_theta = (i + 1) * 2 * Math.PI / amount_vertices;
+        const min_theta = (i +0.25) * 2 * Math.PI / amount_vertices;
+        const max_theta = (i + 0.75) * 2 * Math.PI / amount_vertices;
         const theta = Math.random() * ( max_theta - min_theta) + min_theta;
         vertices_polar.push({r, theta});
     }
@@ -32,9 +32,9 @@ export function SpringySolid(vector_center_, min_radius_, max_radius_, amount_ve
       const coors = particles_world[i]
       const coors2 = particles_world[i + 1]
       const length = p5.Vector.sub(coors2.pos, coors.pos).mag();
-      this.springs.push(new Spring(coors, coors2, length, 10))
+      this.springs.push(new Spring(coors, coors2, length, 7))
       const length_center = p5.Vector.sub(coors.pos, this.vector_center_world).mag();
-      this.springs.push(new Spring(this.particle_center_world, coors, length_center, 7))
+      this.springs.push(new Spring(this.particle_center_world, coors, length_center, 3))
     }
 
     this.get_vertices_cartesian = function() {

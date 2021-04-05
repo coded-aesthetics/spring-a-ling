@@ -19,7 +19,7 @@ export function DelaunaySolid(vector_center_, min_radius_, max_radius_, amount_v
 
     this.springs = [];
 
-    const {vertices, triangles} = create_delaunay_solid(120, 30);
+    const {vertices, triangles} = create_delaunay_solid(200, 15);
     const particles = vertices.map(x => new Particle(x[0] + this.vector_center_world.x, x[1] + this.vector_center_world.y));
 
     for (let i = 0; i < triangles.length; i+=3) {
@@ -30,9 +30,9 @@ export function DelaunaySolid(vector_center_, min_radius_, max_radius_, amount_v
       const length_2 = p5.Vector.sub(particle_2.pos, particle_3.pos).mag();
       const length_3 = p5.Vector.sub(particle_3.pos, particle_1.pos).mag();
 
-      this.springs.push(new Spring(particle_1, particle_2, length_1, 10))
-      this.springs.push(new Spring(particle_2, particle_3, length_2, 10))
-      this.springs.push(new Spring(particle_3, particle_1, length_3, 10))
+      this.springs.push(new Spring(particle_1, particle_2, length_1, 15))
+      this.springs.push(new Spring(particle_2, particle_3, length_2, 15))
+      this.springs.push(new Spring(particle_3, particle_1, length_3, 15))
     }
 
     this.update = function(time_slice, surface_smoothness) {
