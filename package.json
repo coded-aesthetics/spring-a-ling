@@ -25,6 +25,7 @@
     "dist": "ts-node -T fuse.ts dist"
   },
   "dependencies": {
+    "delaunay-fast": "^1.0.1",
     "p5": "^1.3.1"
   }
 }

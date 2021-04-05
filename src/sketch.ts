@@ -1,6 +1,7 @@
 /// <reference path="../global.d.ts" />
 
 import p5 from 'p5';
+import { DelaunaySolid } from './model/delaunay-solid';
 import { Particle } from './model/particle';
 import { Spring } from './model/spring';
 import { SpringySolid } from './model/springy-solid';
@@ -27,7 +28,7 @@ var sketch = function (p: p5) {
     p.createCanvas(window.innerWidth, window.innerHeight-20);
     p.frameRate(fr);
 
-    springy_solid = new SpringySolid(new p5.Vector().set(Math.random()* window.innerWidth, Math.random()* window.innerHeight), 80, 120);
+    springy_solid = new DelaunaySolid(new p5.Vector().set(Math.random()* window.innerWidth, Math.random()* window.innerHeight), 80, 120,7);
     springy_solid_renderer = springy_solid_view(p);
   }
 
@@ -40,6 +41,9 @@ var sketch = function (p: p5) {
     p.background(0);
 
     const time_slice = deltaTime / 1000;
+
+    springy_solid.springs.forEach(x => x.particle_center.act(new p5.Vector().set(0, 5)))
+    springy_solid.springs.forEach(x => x.particle_center.velocity =  x.particle_center.pos.y > p.windowHeight-50 ?  x.particle_center.velocity.reflect(new p5.Vector().set(0, -1)) : x.particle_center.velocity)
 
     springy_solid.update(time_slice, 1/surface_friction);
     springy_solid_renderer.drawSpringySolid(springy_solid);

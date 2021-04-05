@@ -24,7 +24,10 @@ export function Spring(particle_center_, connected_particle_, length_, tension_)
     // Acts like the rubber-string from here on up
     const direction = p5.Vector.sub(point_the_stationary_particle_wants_to_have_the_moving_particle_at, moving.pos);
     const dist_squared = direction.magSq();
-
+    const dist = p5.Vector.sub(moving.pos, stationary.pos).mag();
+    if (dist > length_ * 1.2 || dist < length_ * 0.8) {
+      return;
+    }
     moving.act(direction.normalize().mult(this.tension * time_slice * dist_squared));
     moving.update(time_slice, surface_smoothness);
   }

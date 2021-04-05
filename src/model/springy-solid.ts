@@ -1,4 +1,4 @@
-import p5, { Part } from 'p5';
+import p5 from 'p5';
 import { Particle } from './particle';
 import { calculate_centroid, cartesian_to_polar, polar_to_cartesian } from './particle-utils';
 import { Spring } from './spring';
@@ -32,9 +32,9 @@ export function SpringySolid(vector_center_, min_radius_, max_radius_, amount_ve
       const coors = particles_world[i]
       const coors2 = particles_world[i + 1]
       const length = p5.Vector.sub(coors2.pos, coors.pos).mag();
-      this.springs.push(new Spring(coors, coors2, length*0.9, 10))
+      this.springs.push(new Spring(coors, coors2, length, 10))
       const length_center = p5.Vector.sub(coors.pos, this.vector_center_world).mag();
-      this.springs.push(new Spring(this.particle_center_world, coors, length_center*0.9, 7))
+      this.springs.push(new Spring(this.particle_center_world, coors, length_center, 7))
     }
 
     this.get_vertices_cartesian = function() {
