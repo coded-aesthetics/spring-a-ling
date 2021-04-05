@@ -2,8 +2,8 @@ import { create_random_particles, sort_particles_by_vicinity } from './particle-
 import { Spring } from './spring';
 
 export function SpringRing(amount, sort = true) {
-    // const centerSpring = new Spring(new Particle(Math.random()* window.innerWidth, Math.random()* window.innerHeight), Math.random() * 0.0025);
     this.springs = [];
+
     let particles = create_random_particles(amount, 0, window.innerWidth, 0, window.innerHeight);
     let sorted_particles = sort ? sort_particles_by_vicinity(particles) : particles;
     for (let i = 0; i < sorted_particles.length - 1; i++) {

@@ -34,3 +34,15 @@ export function sort_particles_by_vicinity(particles) {
     const sumVector = vectors.reduce((acc, cur) => p5.Vector.add(acc, cur), new p5.Vector().set(0, 0))
     return sumVector.mult(1 / vectors.length);
   }
+
+  export function polar_to_cartesian({ r, theta }) {
+    let x = r * Math.cos(theta);
+    let y = r * Math.sin(theta);
+    return new p5.Vector().set(x, y);
+  }
+
+  export function cartesian_to_polar({x, y}){
+    const r = Math.sqrt(x*x + y*y)
+    const theta = Math.atan2(y,x) //This takes y first
+    return { r, theta }
+}
