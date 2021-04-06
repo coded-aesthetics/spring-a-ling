@@ -1,6 +1,4 @@
 import p5 from 'p5';
-import { particle_dist, particle_dist_2 } from './particle-utils';
-
 /**
  * This is like the rubber-string, but it wants to have a certain length.
  *
@@ -14,6 +12,7 @@ export function Spring(particle_center_, connected_particle_, length_, tension_)
   this.connected_particle = connected_particle_;
   this.length = length_;
   this.tension = tension_;
+  this.current_tension = tension_;
 
   const act_on_particle = (stationary, moving, time_slice, surface_smoothness) => {
     // The point the stationary particle is trying to pull/push the other particle to is
@@ -24,7 +23,9 @@ export function Spring(particle_center_, connected_particle_, length_, tension_)
     // Acts like the rubber-string from here on up
     const direction = p5.Vector.sub(point_the_stationary_particle_wants_to_have_the_moving_particle_at, moving.pos);
     let dist_squared = direction.magSq();
-    //moving.pos = point_the_stationary_particle_wants_to_have_the_moving_particle_at;
+
+    this.current_tension = this.tension * dist_squared;
+
     moving.act(direction.normalize().mult(this.tension * time_slice * dist_squared));
     moving.update(time_slice, surface_smoothness);
   }

@@ -46,8 +46,8 @@ var sketch = function (p: p5) {
     springy_solid.springs.forEach(x => x.connected_particle.act(new p5.Vector().set(0, 8)))
     const under_0 = springy_solid.springs.find(y => y.particle_center.pos.y > p.windowHeight-100);
     if (under_0) {
-      under_0.particle_center.velocity.reflect(new p5.Vector().set(0, -1)).mult(2.3);
-      under_0.connected_particle.velocity.reflect(new p5.Vector().set(0, -1)).mult(2.3);
+      under_0.particle_center.velocity.reflect(new p5.Vector().set(0, -1)).mult(2.4);
+      under_0.connected_particle.velocity.reflect(new p5.Vector().set(0, -1)).mult(2.4);
           springy_solid.springs.forEach(x => {
             x.particle_center.velocity = under_0.particle_center.velocity.copy();
             x.connected_particle.velocity = under_0.connected_particle.velocity.copy();

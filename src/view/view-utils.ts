@@ -1,6 +1,6 @@
 export const view_utils = function(p:p5) {
 
-  function drawVector(vector, size = 10, color = 255) {
+  function drawVector(vector, size = 10, color: any = 255) {
     p.fill(color);
     p.ellipse(vector.x, vector.y, size, size)
   }

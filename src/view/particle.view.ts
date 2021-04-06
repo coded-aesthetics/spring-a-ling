@@ -1,8 +1,8 @@
 import { view_utils } from './view-utils';
 
 export const particle_view = function(p:p5) {
-    function drawParticle(particle, size = 10, color = 255) {
-        p.fill(color);
+    function drawParticle(particle, size = 10, color: number | number[] = 255) {
+        p.fill(color as any);
         view_utils(p).drawVector(particle.pos, size, color);
       }
 
