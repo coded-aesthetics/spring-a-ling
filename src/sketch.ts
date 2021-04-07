@@ -13,7 +13,7 @@ var sketch = function (p: p5) {
   let springy_solid_renderer;
 
   const fr = 60.0;
-  const surface_friction = 25;
+  const surface_friction = 520;
 
   p.preload = () => {
     // const DING_FILE = require("./ding.mp3").default
@@ -46,17 +46,40 @@ var sketch = function (p: p5) {
     springy_solid.springs.forEach(x => x.connected_particle.act(new p5.Vector().set(0, 8)))
     const under_0 = springy_solid.springs.find(y => y.particle_center.pos.y > p.windowHeight-100);
     if (under_0) {
-      under_0.particle_center.velocity.reflect(new p5.Vector().set(0, -1)).mult(2.4);
-      under_0.connected_particle.velocity.reflect(new p5.Vector().set(0, -1)).mult(2.4);
-          springy_solid.springs.forEach(x => {
+      const dir = Math.random() > 0.5 ? 1 : -1;
+      under_0.particle_center.velocity = under_0.particle_center.average_velocity().reflect(new p5.Vector().set(dir * Math.random(), -4)).mult(3.0);
+      //under_0.connected_particle.velocity.reflect( new p5.Vector().set(dir, -4)).mult(2.6);
+          springy_solid.springs.forEach(x  => {
             x.particle_center.velocity = under_0.particle_center.velocity.copy();
-            x.connected_particle.velocity = under_0.connected_particle.velocity.copy();
+            //x.connected_particle.velocity = under_0.connected_particle.velocity.copy();
+          }
+      )
+    }
+
+    const under_1 = springy_solid.springs.find(y => y.particle_center.pos.x < 0);
+    if (under_1) {
+      under_1.particle_center.velocity = under_1.particle_center.average_velocity().reflect(new p5.Vector().set(1, 0)).mult(1.0);
+      //under_1.connected_particle.velocity.reflect(new p5.Vector().set(1, 0)).mult(1.5);
+          springy_solid.springs.forEach(x => {
+            x.particle_center.velocity = under_1.particle_center.velocity.copy();
+            //x.connected_particle.velocity = under_1.connected_particle.velocity.copy();
+          }
+      )
+    }
+
+    const over_1 = springy_solid.springs.find(y => y.particle_center.pos.x > p.windowWidth);
+    if (over_1) {
+      over_1.particle_center.velocity = over_1.particle_center.average_velocity().reflect(new p5.Vector().set(-1, 0)).mult(1.0);
+      //over_1.connected_particle.velocity.reflect(new p5.Vector().set(-1, 0)).mult(1.5);
+          springy_solid.springs.forEach(x => {
+            x.particle_center.velocity = over_1.particle_center.velocity.copy();
+            //x.connected_particle.velocity = over_1.connected_particle.velocity.copy();
           }
       )
     }
 
     //springy_solid.springs.forEach(x => x.particle_center.pos.y =  x.particle_center.pos.y > p.windowHeight-200 ?  p.windowHeight-200 : x.particle_center.pos.y)
-    springy_solid.springs.forEach(x => x.particle_center.velocity =  x.particle_center.pos.x < 0 ? x.particle_center.velocity.reflect(new p5.Vector().set(1, 0)) : x.particle_center.velocity)
+    // springy_solid.springs.forEach(x => x.particle_center.velocity =  x.particle_center.pos.x < 0 ? x.particle_center.velocity.reflect(new p5.Vector().set(1, 0)) : x.particle_center.velocity)
 
     springy_solid.update(time_slice, 1/surface_friction);
     springy_solid_renderer.drawSpringySolid(springy_solid);
