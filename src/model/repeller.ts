@@ -10,7 +10,7 @@ export function Repeller(particle_center_, connected_particle_, repelling_force_
       const dist = particle_dist(stationary, moving);
       const direction = p5.Vector.sub(moving.pos, stationary.pos).normalize();
       moving.act(direction.mult(this.repelling_force * time_slice * Math.sqrt(dist)));
-      moving.update(time_slice, surface_smoothness);
+      //moving.update(time_slice, surface_smoothness);
     }
 
     this.update = function(time_slice, surface_smoothness) {

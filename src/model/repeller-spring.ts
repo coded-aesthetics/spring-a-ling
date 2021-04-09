@@ -7,7 +7,7 @@ import p5 from 'p5';
  * @param length_ Length the spring wants to have
  * @param tension_ Tension the spring has
  */
-export function Spring(particle_center_, connected_particle_, length_, tension_) {
+export function RepellerSpring(particle_center_, connected_particle_, length_, tension_) {
   this.particle_center = particle_center_;
   this.connected_particle = connected_particle_;
   this.length = length_;
@@ -22,15 +22,15 @@ export function Spring(particle_center_, connected_particle_, length_, tension_)
 
     // Acts like the rubber-string from here on up
     const direction = p5.Vector.sub(point_the_stationary_particle_wants_to_have_the_moving_particle_at, moving.pos);
-    let dist_squared = direction.magSq();
+    let dist_squared = direction.mag();
 
     this.current_tension = this.tension * dist_squared;
 
     moving.act(direction.normalize().mult(this.tension * time_slice * dist_squared));
+    moving.update(time_slice, surface_smoothness);
   }
 
   this.update = function(time_slice, surface_smoothness) {
     act_on_particle(this.particle_center, this.connected_particle, time_slice, surface_smoothness);
-    act_on_particle(this.connected_particle, this.particle_center, time_slice, surface_smoothness);
   }
 }

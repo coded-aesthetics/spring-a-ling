@@ -10,7 +10,9 @@ export const spring_view = function(p:p5) {
         p.stroke(0, 0, 0, 1.0);
         const radius = spring.current_tension / 50;
         const particle = spring.particle_center;
-        const color = [Math.abs(Math.round(particle.velocity.x/2)), Math.abs(Math.round(particle.velocity.y/2)) ,radius*4];
+
+        const color = particle.velocity.x < 0 ? [Math.abs(Math.round(particle.velocity.x/2)), Math.abs(Math.round(particle.velocity.y/2)), radius*4] :
+        [Math.abs(Math.round(particle.velocity.y/2)), Math.abs(Math.round(particle.velocity.x/2)), radius*4];
 
         particle_view(p).drawParticle(spring.particle_center, radius, color);
         particle_view(p).drawParticle(spring.particle_center, 10, [255,255,255,90]);

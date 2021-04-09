@@ -1,6 +1,7 @@
 /// <reference path="../global.d.ts" />
 
 import p5 from 'p5';
+import { DelaunaySolid } from './model/delaunay-solid';
 import { SpringySolid } from './model/springy-solid';
 import { springy_solid_view } from './view/springy-solid.view';
 
@@ -13,7 +14,7 @@ var sketch = function (p: p5) {
   let springy_solid_renderer;
 
   const fr = 60.0;
-  const surface_friction = 520;
+  const surface_friction = 5200;
 
   p.preload = () => {
     // const DING_FILE = require("./ding.mp3").default
@@ -29,7 +30,7 @@ var sketch = function (p: p5) {
     const min_y = window.innerHeight * 1 / 6;
     const max_y = window.innerHeight * 2 / 6;
 
-    springy_solid = new SpringySolid(new p5.Vector().set(Math.random()* (max_x - min_x) + min_x, Math.random()* (max_y - min_y) + min_y), 110, 120,7);
+    springy_solid = new DelaunaySolid(new p5.Vector().set(Math.random()* (max_x - min_x) + min_x, Math.random()* (max_y - min_y) + min_y), 250, 280,7);
     springy_solid_renderer = springy_solid_view(p);
   }
 
@@ -44,10 +45,10 @@ var sketch = function (p: p5) {
     const time_slice = deltaTime / 1000;
 
     springy_solid.springs.forEach(x => x.connected_particle.act(new p5.Vector().set(0, 8)))
-    const under_0 = springy_solid.springs.find(y => y.particle_center.pos.y > p.windowHeight-100);
+    const under_0 = springy_solid.springs.find(y => y.particle_center.pos.y > p.windowHeight - 40);
     if (under_0) {
       const dir = Math.random() > 0.5 ? 1 : -1;
-      under_0.particle_center.velocity = under_0.particle_center.average_velocity().reflect(new p5.Vector().set(dir * Math.random(), -4)).mult(3.0);
+      under_0.particle_center.velocity = under_0.particle_center.average_velocity().reflect(new p5.Vector().set(dir * Math.random(), -4)).mult(2.3);
       //under_0.connected_particle.velocity.reflect( new p5.Vector().set(dir, -4)).mult(2.6);
           springy_solid.springs.forEach(x  => {
             x.particle_center.velocity = under_0.particle_center.velocity.copy();
@@ -82,6 +83,7 @@ var sketch = function (p: p5) {
     // springy_solid.springs.forEach(x => x.particle_center.velocity =  x.particle_center.pos.x < 0 ? x.particle_center.velocity.reflect(new p5.Vector().set(1, 0)) : x.particle_center.velocity)
 
     springy_solid.update(time_slice, 1/surface_friction);
+    springy_solid.springs.forEach((spring) => spring.particle_center.update(time_slice, 1/surface_friction))
     springy_solid_renderer.drawSpringySolid(springy_solid);
 
     then = Date.now();
