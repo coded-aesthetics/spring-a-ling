@@ -7,7 +7,7 @@ const create_solid = (min_radius_, max_radius_, amount_vertices) => {
     const vertices_polar = [];
     for (let i = 0; i < amount_vertices; i++) {
         const r = Math.random() * ( max_radius_ - min_radius_) + min_radius_;
-        const min_theta = (i +0.25) * 2 * Math.PI / amount_vertices;
+        const min_theta = (i + 0.25) * 2 * Math.PI / amount_vertices;
         const max_theta = (i + 0.75) * 2 * Math.PI / amount_vertices;
         const theta = Math.random() * ( max_theta - min_theta) + min_theta;
         vertices_polar.push({r, theta});
