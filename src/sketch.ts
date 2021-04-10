@@ -3,6 +3,7 @@
 import p5 from 'p5';
 import { DelaunaySolid } from './model/delaunay-solid';
 import { nervous_christmas_tree_scene } from './scenes/nervous-christmas-tree.scene';
+import { swingy_christmas_bulb_scene } from './scenes/swingy-christmas-bulb.scene';
 import { springy_solid_view } from './view/springy-solid.view';
 
 var sketch = function (p: p5) {
@@ -13,7 +14,7 @@ var sketch = function (p: p5) {
   const fr = 60.0;
 
   const layers = [
-    nervous_christmas_tree_scene(p)
+    swingy_christmas_bulb_scene(p)
   ]
 
   p.preload = () => {

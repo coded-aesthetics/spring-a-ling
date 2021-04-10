@@ -1,3 +1,4 @@
+import p5 from 'p5';
 import { spring_view } from './spring.view';
 
 export const springy_solid_view = function(p:p5) {
