@@ -14,7 +14,7 @@ var sketch = function (p: p5) {
   const fr = 60.0;
 
   const layers = [
-    swingy_christmas_bulb_scene(p)
+    swingy_christmas_bulb_scene(p),
   ]
 
   p.preload = () => {
