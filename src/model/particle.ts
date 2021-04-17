@@ -18,15 +18,15 @@ export function Particle(x_, y_, velocity_ = new p5.Vector().set(0,0), stationar
     return calculate_centroid(this.velocity_cache);
   }
 
-  this.act = function (velocity) {
+  this.apply_force = function (velocity) {
     if (stationary) return;
     this.velocity.add(velocity);
   }
 
-  this.update = function (time_slice, surface_smoothness) {
+  this.update = function (time_slice, surface_friction) {
     if (stationary) return;
     update_velocity_cache(this.velocity.copy());
-    this.velocity.mult(1- ((1 - surface_smoothness) * time_slice));
+    this.velocity.mult(1- ((1 - surface_friction) * time_slice));
     this.pos.add(p5.Vector.mult(this.velocity, time_slice));
   }
 

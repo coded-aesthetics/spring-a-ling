@@ -1,6 +1,7 @@
 import p5 from 'p5';
+import { IParticle } from '../interfaces';
 import { Particle } from './particle';
-import { calculate_centroid, cartesian_to_polar, polar_to_cartesian } from './particle-utils';
+import { calculate_centroid, polar_to_cartesian } from './particle-utils';
 import { Spring } from './spring';
 
 const create_solid = (min_radius_, max_radius_, amount_vertices) => {
@@ -45,7 +46,11 @@ export function SpringySolid(vector_center_, min_radius_, max_radius_, amount_ve
         return this.vertices_polar.map(polar_to_cartesian).map(vec => p5.Vector.add(vec, this.vector_center_world));
     }
 
-    this.update = function(time_slice, surface_smoothness) {
-        this.springs.forEach(x => x.update(time_slice, surface_smoothness));
+    this.act = function(time_slice) {
+        this.springs.forEach(x => x.act(time_slice));
     }
+
+    this.get_particles = function(): IParticle[] {
+      return this.springs.map(spring => spring.get_particles()).reduce((acc, cur) => acc.concat(cur), []);
+    };
 };

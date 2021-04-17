@@ -21,7 +21,7 @@ export const nervous_christmas_tree_scene = (p: p5) => {
   }
 
   const draw = (time_slice) => {
-    springy_solid.springs.forEach(x => x.connected_particle.act(new p5.Vector().set(0, 8)))
+    springy_solid.springs.forEach(x => x.connected_particle.apply_force(new p5.Vector().set(0, 8)))
     const under_0 = springy_solid.springs.find(y => y.particle_center.pos.y > p.windowHeight - 40);
     if (under_0) {
       const dir = Math.random() > 0.5 ? 1 : -1;

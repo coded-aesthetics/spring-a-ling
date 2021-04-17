@@ -1,3 +1,4 @@
+import { IParticle } from '../interfaces';
 import { create_random_particles, sort_particles_by_vicinity } from './particle-utils';
 import { RubberString } from './rubber-string';
 
@@ -11,9 +12,12 @@ export function RubberBand(amount, sort = true) {
     }
     this.springs.push(new RubberString(sorted_particles[sorted_particles.length - 1], sorted_particles[0], Math.random() * 0.1));
 
-    this.update = function(time_slice, surface_smoothness) {
+    this.act = function(time_slice) {
       this.springs.forEach(spring =>
-        spring.update(time_slice, surface_smoothness)
+        spring.act(time_slice)
       );
+    }
+    this.get_particles = function(): IParticle[] {
+      return this.springs.map(spring => spring.get_particles()).reduce((acc, cur) => acc.concat(cur), []);
     }
   }

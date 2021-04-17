@@ -4,6 +4,7 @@ import { calculate_centroid, polar_to_cartesian } from './particle-utils';
 import { Spring } from './spring';
 import Delaunay from 'delaunay-fast';
 import { RepellerSpring } from './repeller-spring';
+import { IParticle } from '../interfaces';
 
 const get_triangle_center = (vertex_1, vertex_2, vertex_3) => {
     const middle_of_line = p5.Vector.add(vertex_1, p5.Vector.sub(vertex_2, vertex_1).mult(0.5));
@@ -49,7 +50,7 @@ export function DelaunaySolid(vector_center_, min_radius_, max_radius_, amount_v
 
     const {vertices, triangles} = create_delaunay_solid(min_radius_, max_radius_, amount_vertices);
     const particles = vertices.map(x => new Particle(x[0] + this.vector_center_world.x, x[1] + this.vector_center_world.y));
-    console.log(triangles)
+
     for (let i = 0; i < triangles.length; i+=3) {
       const particle_1 = particles[triangles[i]];
       const particle_2 = particles[triangles[i + 1]];
@@ -63,17 +64,10 @@ export function DelaunaySolid(vector_center_, min_radius_, max_radius_, amount_v
       this.springs.push(new Spring(particle_3, particle_1, length_3, 3.2))
     }
 
-    this.update = function(time_slice, surface_smoothness) {
-        /*
-        const centroid = calculate_centroid(this.springs.map((spring) => spring.particle_center.pos))
-        const particle_centroid = new Particle(centroid.x, centroid.y);
-        const repellers = this.springs.map((spring) => {
-            const length = p5.Vector.sub(spring.particle_center.pos, centroid).mag();
-            return new RepellerSpring(particle_centroid, spring.particle_center, length, 1.0);
-        })
-        repellers.forEach((repeller) => repeller.update(time_slice, surface_smoothness));
-        */
-        this.springs.forEach(x => x.update(time_slice, surface_smoothness));
-        //repellers.forEach((repeller) => repeller.update(time_slice, surface_smoothness));
+    this.act = function(time_slice) {
+        this.springs.forEach(x => x.act(time_slice));
+    }
+    this.get_particles = function(): IParticle[] {
+        return this.springs.map(spring => spring.get_particles()).reduce((acc, cur) => acc.concat(cur), []);
     }
 };

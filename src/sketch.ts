@@ -1,10 +1,7 @@
 /// <reference path="../global.d.ts" />
 
 import p5 from 'p5';
-import { DelaunaySolid } from './model/delaunay-solid';
-import { nervous_christmas_tree_scene } from './scenes/nervous-christmas-tree.scene';
-import { swingy_christmas_bulb_scene } from './scenes/swingy-christmas-bulb.scene';
-import { springy_solid_view } from './view/springy-solid.view';
+import { swingy_christmas_bulb_scene } from './scene/swingy-christmas-bulb.scene';
 
 var sketch = function (p: p5) {
   // let ding: p5.SoundFile
@@ -17,6 +14,22 @@ var sketch = function (p: p5) {
     swingy_christmas_bulb_scene(p),
   ]
 
+  p.mousePressed = () => {
+    layers.forEach(scene => scene.mousePressed());
+  }
+
+  p.mouseDragged = () => {
+    layers.forEach(scene => scene.mouseDragged());
+  }
+
+  p.mouseReleased = () => {
+    layers.forEach(scene => scene.mouseReleased());
+  }
+
+  p.mouseWheel = (event) => {
+    layers.forEach(scene => scene.mouseWheel(event));
+  }
+
   p.preload = () => {
     // const DING_FILE = require("./ding.mp3").default
     // ding = new p5.SoundFile(DING_FILE)
@@ -24,13 +37,15 @@ var sketch = function (p: p5) {
   }
 
   p.setup = function () {
-    p.createCanvas(p.windowWidth, p.windowHeight-20);
+    p.createCanvas(p.windowWidth, p.windowHeight - 20);
     p.frameRate(fr);
     layers.forEach(scene => scene.setup());
+    layers.forEach(scene => scene.on_resize(p.windowWidth, p.windowHeight - 20));
   }
 
   p.windowResized = function() {
-    p.resizeCanvas(p.windowWidth, p.windowHeight-20);
+    p.resizeCanvas(p.windowWidth, p.windowHeight - 20);
+    layers.forEach(scene => scene.on_resize(p.windowWidth, p.windowHeight - 20));
   }
 
   p.draw = function () {

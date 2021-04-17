@@ -1,4 +1,14 @@
 import p5 from 'p5';
+import { IActor, IParticle } from '../interfaces';
+
+export interface ISpring extends IActor {
+  particle_center: IParticle;
+  connected_particle: IParticle;
+  length: number;
+  tension: number;
+  current_tension: number;
+}
+
 /**
  * This is like the rubber-string, but it wants to have a certain length.
  *
@@ -14,7 +24,7 @@ export function Spring(particle_center_, connected_particle_, length_, tension_)
   this.tension = tension_;
   this.current_tension = tension_;
 
-  const act_on_particle = (stationary, moving, time_slice, surface_smoothness) => {
+  const apply_force_on_particle = (stationary, moving, time_slice) => {
     // The point the stationary particle is trying to pull/push the other particle to is
     // this.length away in the direction of the moving particle
     const direction_from_stationary_to_moving = p5.Vector.sub(moving.pos, stationary.pos).normalize();
@@ -26,11 +36,16 @@ export function Spring(particle_center_, connected_particle_, length_, tension_)
 
     this.current_tension = this.tension * dist_squared;
 
-    moving.act(direction.normalize().mult(this.tension * time_slice * dist_squared));
+    moving.apply_force(direction.normalize().mult(this.tension * time_slice * dist_squared));
   }
 
-  this.update = function(time_slice, surface_smoothness) {
-    act_on_particle(this.particle_center, this.connected_particle, time_slice, surface_smoothness);
-    act_on_particle(this.connected_particle, this.particle_center, time_slice, surface_smoothness);
+  this.act = function(time_slice) {
+    apply_force_on_particle(this.particle_center, this.connected_particle, time_slice);
+    apply_force_on_particle(this.connected_particle, this.particle_center, time_slice);
   }
+
+
+  this.get_particles = function(): IParticle[] {
+    return [this.particle_center, this.connected_particle];
+  };
 }
