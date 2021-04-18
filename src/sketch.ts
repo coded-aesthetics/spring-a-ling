@@ -14,7 +14,7 @@ var sketch = function (p: p5) {
     swingy_christmas_bulb_scene(p),
   ]
 
-  p.mousePressed = () => {
+  p.mousePressed = (e) => {
     layers.forEach(scene => scene.mousePressed());
   }
 
@@ -24,6 +24,10 @@ var sketch = function (p: p5) {
 
   p.mouseReleased = () => {
     layers.forEach(scene => scene.mouseReleased());
+  }
+
+  p.mouseMoved = () => {
+    layers.forEach(scene => scene.mouseMoved());
   }
 
   p.mouseWheel = (event) => {

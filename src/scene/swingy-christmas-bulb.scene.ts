@@ -7,15 +7,14 @@ import { particles_view } from '../view/particles.view';
 import { RandomParticleSpawner } from '../model/random-particle-spawner';
 import { Kite } from '../model/kite';
 import { kite_renderer } from '../view/kite.view';
+import { MouseControlledViewportAdjustment } from '../view/viewport-controller/mouse-controlled-viewport-adjustment';
 
 export const swingy_christmas_bulb_scene = (p: p5) => {
   const surface_friction = 0.9; // 0 to 1
-  let kite;
-  let kite_view;
-  let kite2;
-  let kite2_view;
-  let kite3;
-  let kite3_view;
+  const amount_kites = 7;
+
+  let kites = [];
+  let kite_views = [];
   let magnetic_repulsor_view;
 
   let particle_spawner;
@@ -25,107 +24,69 @@ export const swingy_christmas_bulb_scene = (p: p5) => {
 
   let world = new GravityWorld(-400);
 
-  let aspect_ratio, width, height;
-
-  let bx = 0, by = 0, x_offset, y_offset, locked, zoom = 1;
+  let viewport_adjustment_strategy = MouseControlledViewportAdjustment({get_world_bounds: () => world.get_bounds()})
 
   const mousePressed = () => {
-    locked = true;
-    x_offset = p.mouseX - bx;
-    y_offset = p.mouseY - by;
+    viewport_adjustment_strategy.mousePressed(p.mouseX, p.mouseY);
   }
 
   const mouseDragged = () => {
-    if (locked) {
-      bx = p.mouseX - x_offset;
-      by = p.mouseY - y_offset;
-    }
+    viewport_adjustment_strategy.mouseDragged(p.mouseX, p.mouseY);
   }
 
   const mouseReleased = () => {
-    locked = false;
+    viewport_adjustment_strategy.mouseReleased(p.mouseX, p.mouseY);
   }
 
   const mouseWheel = (event) => {
-    zoom -= event.delta / 1000;
+    viewport_adjustment_strategy.mouseWheel(event.delta, p.mouseX, p.mouseY);
   }
 
-  const translate = () => {
-    const bounds = world.get_bounds();
-    const world_aspect_ratio = bounds.width / bounds.height;
-    const zoom_factor = world_aspect_ratio > aspect_ratio ? width / bounds.width : height / bounds.height;
-    return {
-      zoom_factor,
-      translate: (v: p5.Vector) => p5.Vector.add(v, p5.Vector.mult(bounds.min, -1)).mult(zoom_factor),
-    }
-  }
-
-  let zoom_factor, bounds;
-
-
-  const translate_small = () => {
-    if (!bounds) {
-     bounds = world.get_bounds();
-    }
-    const world_aspect_ratio = bounds.width / bounds.height;
-    if (!zoom_factor) {
-      zoom_factor = world_aspect_ratio > aspect_ratio ? width * 0.23 / bounds.width : height * 0.23 / bounds.height;
-    }
-    return {
-      zoom_factor: zoom_factor,
-      translate: (v: p5.Vector) => p5.Vector.add(v, p5.Vector.mult(bounds.min, -1)).mult(zoom_factor).add(new p5.Vector().set(width/2-bounds.width*zoom_factor/2, height/2-bounds.height*zoom_factor/2)),
-    }
-  }
-
-  const translate_dragged = () => {
-    return {
-      zoom_factor: zoom,
-      translate: (v: p5.Vector) => p5.Vector.add(v, new p5.Vector().set(bx, by)).mult(zoom)
-    }
+  const mouseMoved = (event) => {
+    viewport_adjustment_strategy.mouseMoved(p.mouseX, p.mouseY);
   }
 
   const preload = () => {
   }
 
+
+
   const setup = () => {
     const min_x = p.windowWidth * 1 / 4;
     const max_x = p.windowWidth * 3 / 4;
 
-    particle_spawner = new RandomParticleSpawner(0, p.windowWidth, 0, p.windowHeight, 100, 120, 0.2, 1);
-    particle_spawner_view = particles_view(p)(translate_small)(particle_spawner.get_particles);
+    const { translate } = viewport_adjustment_strategy;
 
-    kite = new Kite(p);
-    kite_view = kite_renderer(p)(translate_small)(kite);
-    kite2 = new Kite(p);
-    kite2_view = kite_renderer(p)(translate_small)(kite2);
-    kite3 = new Kite(p);
-    kite3_view = kite_renderer(p)(translate_small)(kite3);
+    particle_spawner = new RandomParticleSpawner(0, p.windowWidth, 0, p.windowHeight, 100, 120, 0.2, 1);
+    particle_spawner_view = particles_view(p)(translate)(particle_spawner.get_particles);
+
+    for (let i = 0; i < amount_kites; i++) {
+      const kite = new Kite(p);
+      kite_views.push(kite_renderer(p)(translate)(kite));
+      kites.push(kite);
+      world.add_actor(kite);
+    }
 
     const repulsor_center_vector = randomVector(min_x, max_x, p.windowHeight * 5 / 6,p.windowHeight * 6 / 6);
     const repulsor_center = new Particle(repulsor_center_vector.x, repulsor_center_vector.y, new p5.Vector().set(0, 0), true);
     magnetic_repulsor = new MagneticRepulsor(repulsor_center, () => world.get_particles(), 20);
-    magnetic_repulsor_view = particles_view(p)(translate_small)(magnetic_repulsor.get_particles);
+    magnetic_repulsor_view = particles_view(p)(translate)(magnetic_repulsor.get_particles);
 
-    world.add_actor(kite);
-    world.add_actor(kite2);
-    world.add_actor(kite3);
     world.add_actor(magnetic_repulsor);
     world.add_actor(particle_spawner);
   }
 
   const draw = (time_slice) => {
     world.update(time_slice, surface_friction);
-    kite_view();
-    kite2_view();
-    kite3_view();
+    for (let kite_view of kite_views) {
+      kite_view();
+    }
     magnetic_repulsor_view.drawParticles();
     particle_spawner_view.drawParticlesFunk();
   }
 
   const on_resize = (width_, height_) => {
-    width = width_;
-    height = height_;
-    aspect_ratio = width / height;
+    viewport_adjustment_strategy.on_resize(width_, height_);
   }
 
   return ({
@@ -133,6 +94,6 @@ export const swingy_christmas_bulb_scene = (p: p5) => {
     setup,
     draw,
     on_resize, mousePressed,
-    mouseDragged, mouseReleased, mouseWheel
+    mouseDragged, mouseReleased, mouseWheel,mouseMoved
   })
 }
