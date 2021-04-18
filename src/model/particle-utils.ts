@@ -10,6 +10,10 @@ export function particle_dist_2 (p, p2) {
     return p.pos.dist(p2.pos);
   }
 
+  export function create_random_particle(minX, maxX, minY, maxY, fixed = false) {
+    return new Particle((Math.random()* (maxX - minX)) + minX, (Math.random()* (maxY - minY)) + minY, new p5.Vector().set(0,0), fixed);
+  }
+
 export function create_random_particles(amount, minX, maxX, minY, maxY) {
     let particles = [];
     for (let i = 0; i < amount; i++) {

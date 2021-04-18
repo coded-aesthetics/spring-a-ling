@@ -1,13 +1,16 @@
 import p5 from 'p5';
-import { IActor, IParticle } from '../interfaces';
+import { IActor, IParticle, IWall } from '../interfaces';
 
 export function GravityWorld(gravity = 300) {
     const actors: IActor[] = [];
 
     let particles = new Set<IParticle>();
+    let walls = new Set<IWall>();
 
     this.add_actor = function (actor) {
         actors.push(actor);
+
+        actors.forEach(actor => actor.get_walls ? actor.get_walls().forEach(wall => walls.add(wall)): '');
     }
 
     this.update = function(time_slice, surface_smoothness) {
@@ -18,7 +21,13 @@ export function GravityWorld(gravity = 300) {
             particle.apply_force(new p5.Vector().set(0, gravity * time_slice))
         }
         for (let particle of particles.values()) {
-            particle.update(time_slice, surface_smoothness);
+            let collides = false;
+            for (let wall of walls.values()) {
+                collides = collides || wall.collide(particle, time_slice, surface_smoothness);
+            }
+            if (!collides) {
+                particle.update(time_slice, surface_smoothness);
+            }
         }
     }
 

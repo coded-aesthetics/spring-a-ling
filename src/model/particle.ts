@@ -23,6 +23,13 @@ export function Particle(x_, y_, velocity_ = new p5.Vector().set(0,0), stationar
     this.velocity.add(velocity);
   }
 
+  this.update_preview = function (time_slice, surface_friction) {
+    if (stationary) return this;
+    const vel = p5.Vector.mult(this.velocity,1- ((1 - surface_friction) * time_slice));
+    const pos = p5.Vector.add(this.pos, p5.Vector.mult(vel, time_slice));
+    return new Particle(pos.x, pos.y, vel, stationary);
+  }
+
   this.update = function (time_slice, surface_friction) {
     if (stationary) return;
     update_velocity_cache(this.velocity.copy());

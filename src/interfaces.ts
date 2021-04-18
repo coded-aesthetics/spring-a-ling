@@ -9,4 +9,9 @@ export interface IParticle {
 export interface IActor {
     act(time_slice: number): void;
     get_particles(): IParticle[];
+    get_walls?(): IWall[];
+}
+
+export interface IWall {
+    collide(particle, time_slice, surface_smoothness);
 }

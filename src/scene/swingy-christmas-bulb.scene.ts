@@ -8,10 +8,16 @@ import { RandomParticleSpawner } from '../model/random-particle-spawner';
 import { Kite } from '../model/kite';
 import { kite_renderer } from '../view/kite.view';
 import { MouseControlledViewportAdjustment } from '../view/viewport-controller/mouse-controlled-viewport-adjustment';
+import { Wall } from '../model/wall';
+import { create_random_particle } from '../model/particle-utils';
+import { wall_view } from '../view/wall.view';
 
 export const swingy_christmas_bulb_scene = (p: p5) => {
   const surface_friction = 0.9; // 0 to 1
-  const amount_kites = 7;
+  const amount_kites = 0;
+
+  let wall;
+  let wall_view_;
 
   let kites = [];
   let kite_views = [];
@@ -42,7 +48,7 @@ export const swingy_christmas_bulb_scene = (p: p5) => {
     viewport_adjustment_strategy.mouseWheel(event.delta, p.mouseX, p.mouseY);
   }
 
-  const mouseMoved = (event) => {
+  const mouseMoved = () => {
     viewport_adjustment_strategy.mouseMoved(p.mouseX, p.mouseY);
   }
 
@@ -57,7 +63,7 @@ export const swingy_christmas_bulb_scene = (p: p5) => {
 
     const { translate } = viewport_adjustment_strategy;
 
-    particle_spawner = new RandomParticleSpawner(0, p.windowWidth, 0, p.windowHeight, 100, 120, 0.2, 1);
+    particle_spawner = new RandomParticleSpawner(0, p.windowWidth, 0, p.windowHeight, 100, 120, 2, 5);
     particle_spawner_view = particles_view(p)(translate)(particle_spawner.get_particles);
 
     for (let i = 0; i < amount_kites; i++) {
@@ -67,11 +73,19 @@ export const swingy_christmas_bulb_scene = (p: p5) => {
       world.add_actor(kite);
     }
 
+    wall = new Wall(
+      create_random_particle(min_x, max_x, p.windowHeight * 0 / 6,p.windowHeight * 6 / 6, true),
+      create_random_particle(min_x, max_x, p.windowHeight * 0 / 6,p.windowHeight * 6 / 6, true),
+      0.2
+    );
+    wall_view_ = wall_view(p)(translate)(wall);
+
     const repulsor_center_vector = randomVector(min_x, max_x, p.windowHeight * 5 / 6,p.windowHeight * 6 / 6);
     const repulsor_center = new Particle(repulsor_center_vector.x, repulsor_center_vector.y, new p5.Vector().set(0, 0), true);
     magnetic_repulsor = new MagneticRepulsor(repulsor_center, () => world.get_particles(), 20);
     magnetic_repulsor_view = particles_view(p)(translate)(magnetic_repulsor.get_particles);
 
+    world.add_actor(wall);
     world.add_actor(magnetic_repulsor);
     world.add_actor(particle_spawner);
   }
@@ -83,6 +97,7 @@ export const swingy_christmas_bulb_scene = (p: p5) => {
     }
     magnetic_repulsor_view.drawParticles();
     particle_spawner_view.drawParticlesFunk();
+    wall_view_.drawWall();
   }
 
   const on_resize = (width_, height_) => {
