@@ -21,12 +21,16 @@ export function Wall(particle_start_, particle_end_, bounciness) {
             const vec_from_particle_to_intersection = p5.Vector.sub(vec_intersection, particle.pos);
             const wall_vector = p5.Vector.sub(particle_end_.pos, particle_start_.pos);
             const wall_normal = new p5.Vector().set(-wall_vector.y, wall_vector.x);
-            const new_direction = (vec_from_particle_to_intersection as any).copy().reflect(wall_normal).normalize();
+
             const length_to_line = vec_from_particle_to_intersection.mag();
+            if (length_to_line === 0) {
+                console.log('oh yeah');
+            }
+            const new_direction = (vec_from_particle_to_intersection as any).copy().reflect(wall_normal).normalize();
             const full_length = p5.Vector.sub(particle.pos, particle_update_preview.pos).mag();
-            const remaining_length = full_length - length_to_line;
+            const remaining_length = Math.max(5, full_length - length_to_line);
             particle.pos = p5.Vector.add(vec_intersection, new_direction.mult(remaining_length));
-            particle.velocity = new_direction.mult(particle_update_preview.velocity.mag() * bounciness);
+            particle.velocity = p5.Vector.mult(new_direction, particle_update_preview.velocity.mag() * bounciness * time_slice);
             return true;
         }
         return false;

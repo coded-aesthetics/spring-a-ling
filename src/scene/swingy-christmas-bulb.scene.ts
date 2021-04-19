@@ -14,13 +14,10 @@ import { wall_view } from '../view/wall.view';
 
 export const swingy_christmas_bulb_scene = (p: p5) => {
   const surface_friction = 0.9; // 0 to 1
-  const amount_kites = 0;
+  const amount_kites = 10;
 
-  let wall;
-  let wall_view_;
-
-  let kites = [];
-  let kite_views = [];
+  let walls = [];
+  let wall_views = [];
   let magnetic_repulsor_view;
 
   let particle_spawner;
@@ -28,7 +25,7 @@ export const swingy_christmas_bulb_scene = (p: p5) => {
 
   let magnetic_repulsor;
 
-  let world = new GravityWorld(-400);
+  let world = new GravityWorld(400);
 
   let viewport_adjustment_strategy = MouseControlledViewportAdjustment({get_world_bounds: () => world.get_bounds()})
 
@@ -63,41 +60,37 @@ export const swingy_christmas_bulb_scene = (p: p5) => {
 
     const { translate } = viewport_adjustment_strategy;
 
-    particle_spawner = new RandomParticleSpawner(0, p.windowWidth, 0, p.windowHeight, 100, 120, 2, 5);
+    particle_spawner = new RandomParticleSpawner(0, p.windowWidth, 0, p.windowHeight, 100, 150, 3, 12);
     particle_spawner_view = particles_view(p)(translate)(particle_spawner.get_particles);
 
     for (let i = 0; i < amount_kites; i++) {
-      const kite = new Kite(p);
-      kite_views.push(kite_renderer(p)(translate)(kite));
-      kites.push(kite);
-      world.add_actor(kite);
+      const wall = new Wall(
+        create_random_particle(0, p.windowWidth, p.windowHeight * 0 / 6,p.windowHeight * 6 / 6, true),
+        create_random_particle(0, p.windowWidth, p.windowHeight * 0 / 6,p.windowHeight * 6 / 6, true),
+        10
+      );
+      wall_views.push(wall_view(p)(translate)(wall));
+      walls.push(wall);
+      world.add_actor(wall);
     }
-
-    wall = new Wall(
-      create_random_particle(min_x, max_x, p.windowHeight * 0 / 6,p.windowHeight * 6 / 6, true),
-      create_random_particle(min_x, max_x, p.windowHeight * 0 / 6,p.windowHeight * 6 / 6, true),
-      0.2
-    );
-    wall_view_ = wall_view(p)(translate)(wall);
 
     const repulsor_center_vector = randomVector(min_x, max_x, p.windowHeight * 5 / 6,p.windowHeight * 6 / 6);
     const repulsor_center = new Particle(repulsor_center_vector.x, repulsor_center_vector.y, new p5.Vector().set(0, 0), true);
-    magnetic_repulsor = new MagneticRepulsor(repulsor_center, () => world.get_particles(), 20);
+    magnetic_repulsor = new MagneticRepulsor(repulsor_center, () => world.get_particles(), -20);
     magnetic_repulsor_view = particles_view(p)(translate)(magnetic_repulsor.get_particles);
 
-    world.add_actor(wall);
     world.add_actor(magnetic_repulsor);
     world.add_actor(particle_spawner);
   }
 
   const draw = (time_slice) => {
     world.update(time_slice, surface_friction);
-    for (let kite_view of kite_views) {
-      kite_view();
+    for (let cur of wall_views) {
+      cur.drawWall();
     }
     magnetic_repulsor_view.drawParticles();
     particle_spawner_view.drawParticlesFunk();
-    wall_view_.drawWall();
+    particle_spawner_view.drawParticles();
   }
 
   const on_resize = (width_, height_) => {
