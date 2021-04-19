@@ -13,7 +13,7 @@ import { create_random_particle } from '../model/particle-utils';
 import { wall_view } from '../view/wall.view';
 import { IActor } from '../interfaces';
 
-const renderer = (p) => (world) => (get_actors: () => {magnetic_repulsor: IActor, particle_spawner: IActor, walls: IActor[]}) => (invert_zoom = false) => {
+const renderer = (p) => (world) => (get_actors: () => {kites: IActor[], magnetic_repulsor: IActor, particle_spawner: IActor, walls: IActor[]}) => (invert_zoom = false) => {
   let viewport_adjustment_strategy = MouseControlledViewportAdjustment({get_world_bounds: () => world.get_bounds()})(invert_zoom);
   const mousePressed = () => {
     viewport_adjustment_strategy.mousePressed(p.mouseX, p.mouseY);
@@ -42,6 +42,7 @@ const renderer = (p) => (world) => (get_actors: () => {magnetic_repulsor: IActor
   let magnetic_repulsor_view;
   let particle_spawner_view;
   let wall_views;
+  let kite_views;
 
 
   const {translate} = viewport_adjustment_strategy;
@@ -52,14 +53,21 @@ const renderer = (p) => (world) => (get_actors: () => {magnetic_repulsor: IActor
     magnetic_repulsor_view = particles_view(p)(translate)(actors.magnetic_repulsor.get_particles);
     particle_spawner_view = particles_view(p)(translate)(actors.particle_spawner.get_particles);
     wall_views = [];
+    kite_views = [];
     for (let i = 0; i < actors.walls.length; i++) {
       wall_views.push(wall_view(p)(translate)(actors.walls[i]));
+    }
+    for (let i = 0; i < actors.kites.length; i++) {
+      kite_views.push(kite_renderer(p)(translate)(actors.kites[i]));
     }
   }
 
   const render = () => {
     for (let cur of wall_views) {
       cur.drawWall();
+    }
+    for (let cur of kite_views) {
+      cur();
     }
     magnetic_repulsor_view.drawParticles();
     particle_spawner_view.drawParticlesFunk();
@@ -74,7 +82,7 @@ const renderer = (p) => (world) => (get_actors: () => {magnetic_repulsor: IActor
   }
 }
 
-const scene_renderers = (p) => (world) => (get_actors: () => {magnetic_repulsor: IActor, particle_spawner: IActor, walls: IActor[]}) => {
+const scene_renderers = (p) => (world) => (get_actors: () => {kites: IActor[], magnetic_repulsor: IActor, particle_spawner: IActor, walls: IActor[]}) => {
   let scene_renderer = renderer(p)(world)(get_actors)();
   let scene_renderer_2 = renderer(p)(world)(get_actors)(true);
   const mousePressed = () => {
@@ -125,14 +133,16 @@ const scene_renderers = (p) => (world) => (get_actors: () => {magnetic_repulsor:
 export const swingy_christmas_bulb_scene = (p: p5) => {
   const surface_friction = 0.9; // 0 to 1
   const amount_walls = 10;
+  const amount_kites = 5;
 
   let walls = [];
+  let kites = [];
   let particle_spawner;
   let magnetic_repulsor;
 
   let world = new GravityWorld(400);
 
-  let scene_renderer = scene_renderers(p)(world)(() => ({magnetic_repulsor, particle_spawner, walls}));
+  let scene_renderer = scene_renderers(p)(world)(() => ({kites, magnetic_repulsor, particle_spawner, walls}));
 
   const preload = () => {
   }
@@ -143,6 +153,12 @@ export const swingy_christmas_bulb_scene = (p: p5) => {
 
     particle_spawner = new RandomParticleSpawner(0, p.windowWidth, 0, p.windowHeight, 100, 150, 3, 12);
 
+    for (let i = 0; i < amount_kites; i++) {
+      const kite = new Kite(p);
+      kites.push(kite);
+      world.add_actor(kite);
+
+    }
     for (let i = 0; i < amount_walls; i++) {
       const wall = new Wall(
         create_random_particle(0, p.windowWidth, p.windowHeight * 0 / 6,p.windowHeight * 6 / 6, true),

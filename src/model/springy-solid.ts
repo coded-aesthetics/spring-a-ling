@@ -1,8 +1,9 @@
 import p5 from 'p5';
-import { IParticle } from '../interfaces';
+import { IParticle, IWall } from '../interfaces';
 import { Particle } from './particle';
 import { calculate_centroid, polar_to_cartesian } from './particle-utils';
 import { Spring } from './spring';
+import { Wall } from './wall';
 
 const create_solid = (min_radius_, max_radius_, amount_vertices) => {
     const vertices_polar = [];
@@ -53,4 +54,8 @@ export function SpringySolid(vector_center_, min_radius_, max_radius_, amount_ve
     this.get_particles = function(): IParticle[] {
       return this.springs.map(spring => spring.get_particles()).reduce((acc, cur) => acc.concat(cur), []);
     };
+
+    this.get_walls = function(): IWall[] {
+      return this.springs.map(spring => new Wall(spring.particle_center, spring.connected_particle, 2));
+    }
 };
