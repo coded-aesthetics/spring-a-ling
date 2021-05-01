@@ -1,7 +1,7 @@
 import p5 from 'p5';
 import { Particle } from '../model/particle';
 import { randomVector } from '../model/utils';
-import { GravityWorld } from '../world/gravity-world';
+import { World } from '../world/world';
 import { MagneticRepulsor } from '../model/magnetic-repulsor';
 import { particles_view } from '../view/particles.view';
 import { RandomParticleSpawner } from '../model/random-particle-spawner';
@@ -12,9 +12,12 @@ import { Wall } from '../model/wall';
 import { create_random_particle } from '../model/particle-utils';
 import { wall_view } from '../view/wall.view';
 import { IActor } from '../interfaces';
+import { GravitySource } from '../model/gravity-source';
+import { HyperactiveViewportAdjustment } from '../view/viewport-controller/hyperactive-viewport-adjustment';
+import { InitialViewportAdjustment } from '../view/viewport-controller/initial-viewport-adjustment';
 
 const renderer = (p) => (world) => (get_actors: () => {kites: IActor[], magnetic_repulsor: IActor, particle_spawner: IActor, walls: IActor[]}) => (invert_zoom = false) => {
-  let viewport_adjustment_strategy = MouseControlledViewportAdjustment({get_world_bounds: () => world.get_bounds()})(invert_zoom);
+  let viewport_adjustment_strategy = InitialViewportAdjustment({get_world_bounds: () => world.get_bounds()});
   const mousePressed = () => {
     viewport_adjustment_strategy.mousePressed(p.mouseX, p.mouseY);
   }
@@ -133,14 +136,14 @@ const scene_renderers = (p) => (world) => (get_actors: () => {kites: IActor[], m
 export const swingy_christmas_bulb_scene = (p: p5) => {
   const surface_friction = 0.9; // 0 to 1
   const amount_walls = 10;
-  const amount_kites = 5;
+  const amount_kites = 1;
 
   let walls = [];
   let kites = [];
   let particle_spawner;
   let magnetic_repulsor;
 
-  let world = new GravityWorld(400);
+  let world = new World();
 
   let scene_renderer = scene_renderers(p)(world)(() => ({kites, magnetic_repulsor, particle_spawner, walls}));
 
@@ -151,7 +154,7 @@ export const swingy_christmas_bulb_scene = (p: p5) => {
     const min_x = p.windowWidth * 1 / 4;
     const max_x = p.windowWidth * 3 / 4;
 
-    particle_spawner = new RandomParticleSpawner(0, p.windowWidth, 0, p.windowHeight, 100, 150, 3, 12);
+    particle_spawner = new RandomParticleSpawner(0, p.windowWidth, 0, p.windowHeight, 25, 50, 3, 12);
 
     for (let i = 0; i < amount_kites; i++) {
       const kite = new Kite(p);
@@ -161,9 +164,9 @@ export const swingy_christmas_bulb_scene = (p: p5) => {
     }
     for (let i = 0; i < amount_walls; i++) {
       const wall = new Wall(
-        create_random_particle(0, p.windowWidth, p.windowHeight * 0 / 6,p.windowHeight * 6 / 6, true),
-        create_random_particle(0, p.windowWidth, p.windowHeight * 0 / 6,p.windowHeight * 6 / 6, true),
-        10
+        create_random_particle(p.windowWidth*-5, p.windowWidth*5, p.windowHeight * -10, p.windowHeight * -5, true),
+        create_random_particle(p.windowWidth*-5, p.windowWidth*5, p.windowHeight * -10,p.windowHeight * -5, true),
+        50
       );
       walls.push(wall);
       world.add_actor(wall);
@@ -171,10 +174,12 @@ export const swingy_christmas_bulb_scene = (p: p5) => {
 
     const repulsor_center_vector = randomVector(min_x, max_x, p.windowHeight * 5 / 6,p.windowHeight * 6 / 6);
     const repulsor_center = new Particle(repulsor_center_vector.x, repulsor_center_vector.y, new p5.Vector().set(0, 0), true);
-    magnetic_repulsor = new MagneticRepulsor(repulsor_center, () => world.get_particles(), -20);
+    magnetic_repulsor = new MagneticRepulsor(repulsor_center, () => world.get_particles(), 30);
+    magnetic_repulsor = new MagneticRepulsor(repulsor_center, () => world.get_particles(), 30);
 
     world.add_actor(magnetic_repulsor);
     world.add_actor(particle_spawner);
+    world.add_actor(new GravitySource(() => world.get_particles(), -200));
     scene_renderer.init();
   }
 

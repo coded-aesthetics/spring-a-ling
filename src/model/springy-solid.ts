@@ -36,7 +36,7 @@ export function SpringySolid(vector_center_, min_radius_, max_radius_, amount_ve
       const length = p5.Vector.sub(coors2.pos, coors.pos).mag();
       this.springs.push(new Spring(coors, coors2, length, 7))
       const length_center = p5.Vector.sub(coors.pos, this.vector_center_world).mag();
-      this.springs.push(new Spring(this.particle_center_world, coors, length_center, 3))
+      this.springs.push(new Spring(this.particle_center_world, coors, length_center, 7))
     }
 
     this.get_vertices_cartesian = function() {
@@ -56,6 +56,6 @@ export function SpringySolid(vector_center_, min_radius_, max_radius_, amount_ve
     };
 
     this.get_walls = function(): IWall[] {
-      return this.springs.map(spring => new Wall(spring.particle_center, spring.connected_particle, 2));
+      return this.springs.map(spring => new Wall(spring.particle_center, spring.connected_particle, 10));
     }
 };

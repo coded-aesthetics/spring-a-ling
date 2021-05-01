@@ -1,6 +1,5 @@
 import p5 from 'p5';
 import { calculate_centroid } from './particle-utils';
-
 export function Particle(x_, y_, velocity_ = new p5.Vector().set(0,0), stationary = false) {
   this.velocity = velocity_;
   this.pos = new p5.Vector().set(x_ , y_);
@@ -25,7 +24,7 @@ export function Particle(x_, y_, velocity_ = new p5.Vector().set(0,0), stationar
 
   this.update_preview = function (time_slice, surface_friction) {
     if (stationary) return new Particle(this.pos.x, this.pos.y, this.velocity.copy(), stationary);
-    const vel = p5.Vector.mult(this.velocity,1- ((1 - surface_friction) * time_slice));
+    const vel = p5.Vector.mult(this.velocity, Math.pow(surface_friction, time_slice));
     const pos = p5.Vector.add(this.pos, p5.Vector.mult(vel, time_slice));
     return new Particle(pos.x, pos.y, vel, stationary);
   }
@@ -33,7 +32,7 @@ export function Particle(x_, y_, velocity_ = new p5.Vector().set(0,0), stationar
   this.update = function (time_slice, surface_friction) {
     if (stationary) return;
     update_velocity_cache(this.velocity.copy());
-    this.velocity.mult(1- ((1 - surface_friction) * time_slice));
+    this.velocity.mult(Math.pow(surface_friction, time_slice));
     this.pos.add(p5.Vector.mult(this.velocity, time_slice));
   }
 

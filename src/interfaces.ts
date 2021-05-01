@@ -14,4 +14,5 @@ export interface IActor {
 
 export interface IWall {
     collide(particle, time_slice, surface_smoothness);
+    get_particles(): IParticle[];
 }

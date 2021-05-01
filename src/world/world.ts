@@ -1,29 +1,42 @@
 import p5 from 'p5';
 import { IActor, IParticle, IWall } from '../interfaces';
 
-export function GravityWorld(gravity = 300) {
+export function World() {
     const actors: IActor[] = [];
 
     let particles = new Set<IParticle>();
     let walls = new Set<IWall>();
+    let wall_particles = new Set<IParticle>();
 
     this.add_actor = function (actor) {
         actors.push(actor);
 
         actors.forEach(actor => actor.get_walls ? actor.get_walls().forEach(wall => walls.add(wall)): '');
+        walls.forEach(wall => wall.get_particles().forEach(particle => wall_particles.add(particle)));
     }
 
     this.update = function(time_slice, surface_smoothness) {
-        particles = new Set<IParticle>();
+        particles.clear();
         actors.forEach(actor => actor.get_particles().forEach(particle => particles.add(particle)));
         actors.forEach(actor => actor.act(time_slice));
-        for (let particle of particles.values()) {
-            particle.apply_force(new p5.Vector().set(0, gravity * time_slice))
-        }
-        for (let particle of particles.values()) {
+
+        for (let particle of wall_particles.values()) {
             let collides = false;
             for (let wall of walls.values()) {
                 collides = collides || wall.collide(particle, time_slice, surface_smoothness);
+                if (collides) continue;
+            }
+            if (!collides) {
+                particle.update(time_slice, surface_smoothness);
+            }
+        }
+
+        for (let particle of particles.values()) {
+            if (wall_particles.has(particle)) continue;
+            let collides = false;
+            for (let wall of walls.values()) {
+                collides = collides || wall.collide(particle, time_slice, surface_smoothness);
+                if (collides) continue;
             }
             if (!collides) {
                 particle.update(time_slice, surface_smoothness);

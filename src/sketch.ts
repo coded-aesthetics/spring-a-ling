@@ -8,13 +8,15 @@ var sketch = function (p: p5) {
 
   let then = Date.now();
 
-  const fr = 60.0;
+  let fr = 60;
 
   const layers = [
     swingy_christmas_bulb_scene(p),
   ]
 
   p.mousePressed = (e) => {
+    fr = fr === 10 ? 60 : 10;
+    p.frameRate(fr);
     layers.forEach(scene => scene.mousePressed());
   }
 
@@ -54,13 +56,14 @@ var sketch = function (p: p5) {
 
   p.draw = function () {
     const deltaTime = (Date.now() - then);
+    then = Date.now();
+
     p.background(0);
 
     const time_slice = deltaTime / 1000;
 
     layers.forEach(scene => scene.draw(time_slice));
 
-    then = Date.now();
   }
 }
 

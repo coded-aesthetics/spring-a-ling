@@ -32,6 +32,6 @@ export const HyperactiveViewportAdjustment = (deps: {
         mouseDragged: (mouseX, mouseY) => {},
         mouseReleased: (mouseX, mouseY) => {},
         mouseMoved: (mouseX, mouseY) => {},
-        mouseWheel: (event) => {},
+        mouseWheel: (event, mouseX, mouseY) => {},
       }
 }
